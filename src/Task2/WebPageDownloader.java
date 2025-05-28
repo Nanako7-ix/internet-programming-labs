@@ -20,22 +20,25 @@ public class WebPageDownloader {
             return;
         }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder content = new StringBuilder();
-        String line;
-        while ((line = in.readLine()) != null) {
-            content.append(line).append("\n");
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            System.out.println("无法读取网页源码内容" + e.getMessage());
         }
-        in.close();
 
         System.out.println("网页源码内容如下：\n");
         System.out.println(content);
 
-        String filename = "downloaded_page.html";
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"));
-        writer.write(content.toString());
-        writer.close();
-
+        String filename = "download.html";
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), StandardCharsets.UTF_8))) {
+            out.write(content.toString());
+        } catch (IOException e) {
+            System.out.println("无法写入文件" + e.getMessage());
+        }
         System.out.println("\n网页已保存为 " + filename);
     }
 }
