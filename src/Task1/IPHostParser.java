@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class PraseHostOrIP {
+public class IPHostParser {
     private static boolean isIpAddress (String s) throws UnknownHostException {
         return InetAddress.getByName(s).getHostAddress().equals(s);
     }
