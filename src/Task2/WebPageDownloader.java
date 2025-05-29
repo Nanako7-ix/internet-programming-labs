@@ -13,8 +13,9 @@ public class WebPageDownloader {
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
+
             int responseCode = connection.getResponseCode();
-            if (responseCode != 200) {
+            if (connection.getResponseCode() != 200) {
                 System.out.println("请求失败，响应码: " + responseCode);
                 return;
             }
@@ -39,6 +40,9 @@ public class WebPageDownloader {
                 System.out.println("无法写入文件" + e.getMessage());
             }
             System.out.println("\n网页已保存为 " + filename);
+
+        } catch (MalformedURLException e) {
+            System.out.println("URL格式错误" + e.getMessage());
         } catch (IOException e) {
             System.out.println("无法建立连接" + e.getMessage());
         }
