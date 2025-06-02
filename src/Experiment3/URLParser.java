@@ -23,5 +23,6 @@ public class URLParser {
         } catch (MalformedURLException e) {
             System.out.println("URL格式错误: " + e.getMessage());
         }
+        scanner.close();
     }
 }

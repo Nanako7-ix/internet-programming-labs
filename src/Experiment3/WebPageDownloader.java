@@ -18,6 +18,7 @@ public class WebPageDownloader {
             int responseCode = connection.getResponseCode();
             if (connection.getResponseCode() != 200) {
                 System.out.println("请求失败，响应码: " + responseCode);
+                scanner.close();
                 return;
             }
 
@@ -47,5 +48,6 @@ public class WebPageDownloader {
         } catch (IOException e) {
             System.out.println("无法建立连接" + e.getMessage());
         }
+        scanner.close();
     }
 }
