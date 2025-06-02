@@ -1,4 +1,4 @@
-package Task3;
+package Experiment3;
 
 import java.net.*;
 import java.util.Scanner;
