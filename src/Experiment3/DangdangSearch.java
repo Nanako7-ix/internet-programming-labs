@@ -44,7 +44,7 @@ public class DangdangSearch {
                 System.out.println("无法写入文件或搜索失败" + e.getMessage());
             }
 
-            System.out.println("搜索结果已保存为 productResult.html");
+            System.out.println("搜索结果已保存为 SearchResult.html");
 
         } catch (Exception e) {
             System.out.println("搜索失败: " + e.getMessage());
