@@ -31,7 +31,7 @@ public class DangdangSearch {
             }
 
             try (
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "GB2312"));
                 BufferedWriter out = new BufferedWriter(new FileWriter("SearchResult.html"))
             ) {
                 String line;
