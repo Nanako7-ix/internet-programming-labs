@@ -3,13 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fuck</title>
+    <title>这是一个标题</title>
 </head>
 <body>
-    <h1>这是一个h1</h1>
-    <h2>这是一个h2</h2>
-    <h3>这是一个h3</h3>
-    <h4>这是一个h4</h4>
-    <h5>这是一个h5</h5>
+    <p>如果这个网页能正常显示，说明index.html可以正常传输</p>
+    <p>如果能看到某粉色锉刀，说明图片也能正确发送</p>
+    <img src="/image.png" alt="这是一个图片">
+    <p>输入内容并点击按钮，就会发送echo的POST请求：</p>
+    <div>
+        <input id="echoInput" type="echo">
+        <button onclick="sendPost()">点击发送POST请求</button>
+    </div>
 </body>
 </html>
+
+<script>
+    function sendPost() {
+        const data = document.getElementById("echoInput").value;
+
+        fetch("/echo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: data
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert("服务器响应: " + data);
+        })
+    }
+</script>
