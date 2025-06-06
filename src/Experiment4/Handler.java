@@ -104,7 +104,6 @@ public class Handler {
         String path = header.get("Path");
         if (path.equals("/")) path = "/index.html";
         path = "./static" + path;
-        System.out.println(path);
         File file = new File(path);
 
         // 404 Not Found
@@ -137,7 +136,6 @@ public class Handler {
         String path = header.get("Path");
         if (path.equals("/")) path = "/index.html";
         path = "./static" + path;
-        System.out.println(path);
         File file = new File(path);
 
         // 404 Not Found
