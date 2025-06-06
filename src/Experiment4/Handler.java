@@ -7,11 +7,9 @@ import java.util.Map;
 
 public class Handler {
     private final OutputStream out;
-
     public Handler(OutputStream out) {
         this.out = out;
     }
-
     // 400 Bad Request
     public void BadRequest() {
         String response = """
@@ -89,7 +87,6 @@ public class Handler {
             default -> MethodNotAllowed();
         }
     }
-
     private String guessMimeType(String path) {
         if (path.endsWith(".html") || path.endsWith(".htm")) return "text/html";
         if (path.endsWith(".css")) return "text/css";
@@ -99,19 +96,16 @@ public class Handler {
         if (path.endsWith(".gif")) return "image/gif";
         return "application/octet-stream";
     }
-
     private void GET(Map<String, String> header) {
         String path = header.get("Path");
         if (path.equals("/")) path = "/index.html";
         path = "./static" + path;
         File file = new File(path);
-
         // 404 Not Found
         if (!file.exists() || file.isDirectory()) {
             NotFound();
             return;
         }
-
         try {
             byte[] content;
             try {
@@ -131,19 +125,16 @@ public class Handler {
             System.out.println("无法发送响应报文" + e.getMessage());
         }
     }
-
     private void HEAD(Map<String, String> header) {
         String path = header.get("Path");
         if (path.equals("/")) path = "/index.html";
         path = "./static" + path;
         File file = new File(path);
-
         // 404 Not Found
         if (!file.exists() || file.isDirectory()) {
             NotFound();
             return;
         }
-
         try {
             String mime = guessMimeType(path);
             String response = "HTTP/1.1 200 OK\r\n" +
@@ -155,21 +146,16 @@ public class Handler {
             System.out.println("无法发送响应报文" + e.getMessage());
         }
     }
-
     private void POST(Map<String, String> header, String body) {
         String path = header.get("Path");
-
         // 404 Not Found
         if (path == null || !path.equals("/echo")) {
             NotFound();
             return;
         }
-
         String contentType = header.getOrDefault("Content-Type", "text/plain");
         byte[] content = body.getBytes(StandardCharsets.UTF_8);
-
         System.out.println("Client Post: " + new String(content));
-
         try {
             String response = "HTTP/1.1 200 OK\r\n" +
                     "Content-Type: " + contentType + "\r\n" +

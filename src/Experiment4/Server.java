@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 
 public class Server {
     private static final ExecutorService pool = Executors.newFixedThreadPool(100);
-
     public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(12345)) {
             while (true) {
@@ -23,7 +22,6 @@ public class Server {
                         Handler handler = new Handler(out);
                         Map<String, String> header = new HashMap<>();
                         String body = "";
-
                         try {
                             String line = in.readLine();
                             if (line == null || line.isEmpty()) {
@@ -47,7 +45,6 @@ public class Server {
                                     return;
                                 }
                             }
-    
                             if (header.get("Method").equalsIgnoreCase("POST")) {
                                 int length;
                                 try {
@@ -68,7 +65,6 @@ public class Server {
                                 }
                                 body = new String(bodyChars);
                             }
-
                             handler.Respond(header, body);
                         } catch (IOException e) {
                             handler.InternalServerError();
