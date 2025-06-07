@@ -14,13 +14,15 @@
         <input id="echoInput" type="echo">
         <button onclick="sendPost()">点击发送POST请求</button>
     </div>
+    <div style="margin-top: 20px;">
+        <button onclick="getLast()">点击获取上一次输入的内容</button>
+    </div>
 </body>
 </html>
 
 <script>
     function sendPost() {
         const data = document.getElementById("echoInput").value;
-
         fetch("/echo", {
             method: "POST",
             headers: {
@@ -31,6 +33,18 @@
         .then(response => response.text())
         .then(data => {
             alert("服务器响应: " + data);
+        })
+    }
+    function getLast() {
+        fetch("/last", {
+            method: "GET",
+            headers: {
+                "Content-Type": "text/plain"
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert("上一次输入的内容: " + data);
         })
     }
 </script>

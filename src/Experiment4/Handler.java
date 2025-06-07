@@ -1,6 +1,7 @@
 package Experiment4;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
@@ -98,6 +99,22 @@ public class Handler {
     }
     private void GET(Map<String, String> header) {
         String path = header.get("Path");
+        if (path.equals("/last")) {
+            String last = header.get("Cookie");
+            if (last != null) {
+                last = last.replace("last=", "");
+            } else last = "没有上次提交的内容";
+            try {
+                String response = "HTTP/1.1 200 OK\r\n" +
+                        "Content-Type: text/plain\r\n" +
+                        "Content-Length: " + last.length() + "\r\n" +
+                        "\r\n" + last;
+                out.write(response.getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                System.out.println("无法发送响应报文" + e.getMessage());
+            }
+            return;
+        }
         if (path.equals("/")) path = "/index.html";
         path = "./static" + path;
         File file = new File(path);
@@ -160,6 +177,7 @@ public class Handler {
             String response = "HTTP/1.1 200 OK\r\n" +
                     "Content-Type: " + contentType + "\r\n" +
                     "Content-Length: " + content.length + "\r\n" +
+                    "Set-Cookie: last=" + URLEncoder.encode(body, StandardCharsets.UTF_8) + "; Max-Age=3600\r\n" +
                     "\r\n";
             out.write(response.getBytes(StandardCharsets.UTF_8));
             out.write(content);
