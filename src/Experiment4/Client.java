@@ -2,6 +2,7 @@ package Experiment4;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Client {
@@ -49,7 +50,7 @@ public class Client {
                         System.out.println();
                         char[] body = new char[contentLength];
                         int read = in.read(body, 0, contentLength);
-                        System.out.println(new String(body, 0, read));
+                        System.out.println(URLDecoder.decode(new String(body, 0, read)));
                     }
                 } catch (IOException e) {
                     System.out.println("无法读取响应报文: " + e.getMessage());
@@ -88,10 +89,12 @@ public class Client {
         out.flush();
     }
     private static void POST(PrintWriter out) throws IOException {
-        System.out.println("输入路径(目前可选路径仅为/echo)");
+        System.out.println("输入路径");
         String path = scanner.nextLine();
         System.out.println("输入POST内容");
         String body = scanner.nextLine();
+        body = URLEncoder.encode(body, StandardCharsets.UTF_8);
+
         StringBuilder builder = new StringBuilder();
         builder.append("POST ").append(path).append(" HTTP/1.1\r\n");
         builder.append("Host: localhost\r\n");
