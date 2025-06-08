@@ -1,6 +1,7 @@
 package Experiment4;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -102,7 +103,7 @@ public class Handler {
         if (path.equals("/last")) {
             String last = header.get("Cookie");
             if (last != null) {
-                last = last.replace("last=", "");
+                last = URLDecoder.decode(last.replace("last=", ""), StandardCharsets.UTF_8);
             } else last = "没有上次提交的内容";
             try {
                 String response = "HTTP/1.1 200 OK\r\n" +
@@ -172,7 +173,7 @@ public class Handler {
         }
         String contentType = header.getOrDefault("Content-Type", "text/plain");
         byte[] content = body.getBytes(StandardCharsets.UTF_8);
-        System.out.println("Client Post: " + new String(content));
+        System.out.println("Request Body:\n" + new String(content) + "\n");
         try {
             String response = "HTTP/1.1 200 OK\r\n" +
                     "Content-Type: " + contentType + "\r\n" +

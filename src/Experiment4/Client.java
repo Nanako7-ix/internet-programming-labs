@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.Scanner;
 
 public class Client {
+    private static String Cookie = null;
     private static Scanner scanner;
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
@@ -24,6 +25,7 @@ public class Client {
                         case "POST" -> POST(out);
                         default -> {
                             System.out.println("请求方法错误");
+                            continue;
                         }
                     }
                 } catch (IOException e) {
@@ -38,6 +40,9 @@ public class Client {
 
                         if (response.startsWith("Content-Length:")) {
                             contentLength = Integer.parseInt(response.substring("Content-Length:".length()).trim());
+                        }
+                        if (response.startsWith("Set-Cookie:")) {
+                            Cookie = response.substring("Set-Cookie:".length()).trim().split(";", 2)[0];
                         }
                     }
                     if (!s.equals("HEAD") && contentLength > 0) {
@@ -59,34 +64,44 @@ public class Client {
     private static void GET(PrintWriter out) throws IOException {
         System.out.println("输入路径");
         String path = scanner.nextLine();
-        String request = "GET " + path + " HTTP/1.1\r\n" +
-                "Host: localhost\r\n" +
-                "Connection: close\r\n" +
-                "\r\n";
-        out.print(request);
+        StringBuilder builder = new StringBuilder();
+        builder.append("GET ").append(path).append(" HTTP/1.1\r\n");
+        builder.append("Host: localhost\r\n");
+        if (Cookie != null) {
+            builder.append("Cookie: ").append(Cookie).append("\r\n");
+        }
+        builder.append("Connection: close\r\n");
+        out.print(builder.append("\r\n"));
         out.flush();
     }
     private static void HEAD(PrintWriter out) throws IOException {
         System.out.println("输入路径");
         String path = scanner.nextLine();
-        String request = "HEAD " + path + " HTTP/1.1\r\n" +
-                "Host: localhost\r\n" +
-                "Connection: close\r\n" +
-                "\r\n";
-        out.print(request);
+        StringBuilder builder = new StringBuilder();
+        builder.append("HEAD ").append(path).append(" HTTP/1.1\r\n");
+        builder.append("Host: localhost\r\n");
+        if (Cookie != null) {
+            builder.append("Cookie: ").append(Cookie).append("\r\n");
+        }
+        builder.append("Connection: close\r\n");
+        out.print(builder.append("\r\n"));
         out.flush();
     }
     private static void POST(PrintWriter out) throws IOException {
+        System.out.println("输入路径(目前可选路径仅为/echo)");
+        String path = scanner.nextLine();
         System.out.println("输入POST内容");
         String body = scanner.nextLine();
-        String request = "POST /echo HTTP/1.1\r\n" +
-                "Host: localhost\r\n" +
-                "Content-Type: text/plain\r\n" +
-                "Content-Length: " + body.length() + "\r\n" +
-                "Connection: close\r\n" +
-                "\r\n" +
-                body;
-        out.print(request);
+        StringBuilder builder = new StringBuilder();
+        builder.append("POST ").append(path).append(" HTTP/1.1\r\n");
+        builder.append("Host: localhost\r\n");
+        builder.append("Content-Type: text/plain\r\n");
+        builder.append("Content-Length: ").append(body.length()).append("\r\n");
+        if (Cookie != null) {
+            builder.append("Cookie: ").append(Cookie).append("\r\n");
+        }
+        builder.append("Connection: close\r\n");
+        out.print(builder.append("\r\n").append(body));
         out.flush();
     }
 }

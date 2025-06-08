@@ -15,6 +15,7 @@ public class Server {
                 Socket client = server.accept();
                 pool.submit(() -> {
                     System.out.println("\nClient Socket: " + client.getInetAddress() + ":" + client.getPort());
+                    System.out.println("Request Header:");
                     try (
                         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                         OutputStream out = client.getOutputStream()
@@ -37,6 +38,7 @@ public class Server {
                             header.put("Path", firstLine[1].trim());
                             header.put("Version", firstLine[2].trim());
                             while ((line = in.readLine()) != null && !line.isEmpty()) {
+                                System.out.println(line);
                                 String[] headerParts = line.split(":", 2);
                                 if (headerParts.length == 2) {
                                     header.put(headerParts[0].trim(), headerParts[1].trim());
